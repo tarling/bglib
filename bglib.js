@@ -13,7 +13,7 @@
   } else {
     module.exports = factory(require("./lib/bglib-responses"), require("./lib/bglib-events"));
   }
-}(this, function(Responses, Events) {
+}(this, function(libRes, libEvent) {
   var DEBUG = 0;
 
     var _bgmessageType = {
@@ -366,7 +366,7 @@
         // Parse and put packets back together
         this.reconstructPackets(incomingBytes, function createResponse(err, packets) {
 
-            // Array for parsed responses/events
+            // Array for parsed Responses/Events
             var parsedReturn = [];
 
             if (err) {
@@ -399,7 +399,7 @@
                     try {
                         var eventCreator;
                         // Check to see if we have an event object for this packet
-                        if ((eventCreator=Events[packet.cClass][packet.cID])) {
+                        if ((eventCreator=libEvent.Events[packet.cClass][packet.cID])) {
 
                         // Create the event object
                         data = new eventCreator(packet.payload);
@@ -424,7 +424,7 @@
                     // Create the response object
                     try {
                         var responseCreator;
-                        if ((responseCreator = Responses[packet.cClass][packet.cID])) {
+                        if ((responseCreator = libRes.Responses[packet.cClass][packet.cID])) {
                             data = new responseCreator(packet.payload);
 
                             // Add the parsed packet to the array
