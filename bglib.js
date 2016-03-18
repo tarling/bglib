@@ -881,5 +881,5 @@
         dfuFlashUploadFinish: {header : {tType: _bgtechnologyType.Bluetooth, mType: _bgmessageType.Command, lolen : 0, cls : _bgcommandClass.DFU, command : _bgcommandIDs.DFU_Flash_Upload_Finish}, paramCode: 0x00},
     }
     
-    return bgLib;
+    return bglib;
 }));
