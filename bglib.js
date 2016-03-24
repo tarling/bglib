@@ -7,13 +7,13 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-(function (root, factory) {
+(function (root, deps, factory) {
   if(typeof define === "function" && define.amd) {
-    define(["./lib/bglib-responses", "./lib/bglib-events"], factory);
+    define(deps, factory);
   } else {
-    module.exports = factory(require("./lib/bglib-responses"), require("./lib/bglib-events"));
+    module.exports = factory.apply(deps.map(require));
   }
-}(this, function(libRes, libEvent) {
+}(this, ["./lib/bglib-responses", "./lib/bglib-events", "./lib/data-utils"], function(libRes, libEvent, dataUtils) {
   var DEBUG = 0;
 
     var _bgmessageType = {
