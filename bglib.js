@@ -288,6 +288,15 @@
         gap_scan_policy_whitelist : 1
     }
     
+    function getByteArray(o) {
+        if (typeof Buffer !== "undefined")
+        {
+            return new Uint8Array(o);
+        } else {
+            return 0;
+        }
+    }
+    
     function makeBuffer(length) {
         if (typeof Buffer !== "undefined")
         {
@@ -351,10 +360,12 @@
         packetHeader[i++] = this.cID;
 
         var packetBytes = concatBuffers(packetHeader, this.payload);
+        
+        var byteArray = getByteArray(packetBytes);
 
-        callback && callback(packetBytes);
+        callback && callback(byteArray);
 
-        return packetBytes;
+        return byteArray;
     }
 
     var ParsedPacket = function(packet, responseType, response) {
