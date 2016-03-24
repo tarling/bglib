@@ -640,7 +640,7 @@
                     case 2:
                         // Add each byte of param to array
                         var rBuf = dataUtils.makeBuffer(1);
-                        rBuf.writeUInt8(param, 0);
+                        dataUtils.writeUInt8(rBuf, param, 0);
                         payloadBuffer = dataUtils.concatBuffers(payloadBuffer, rBuf);
 
                         break
