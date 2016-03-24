@@ -612,7 +612,7 @@
                         else {
                             // Add each byte of param to array
                             var rBuf = dataUtils.makeBuffer(4);
-                            rBuf.writeUInt32LE(param, 0);
+                            dataUtils.writeUInt32LE(rBuf, param, 0);
                             payloadBuffer = dataUtils.concatBuffers(payloadBuffer, rBuf);
                         }
 
@@ -629,7 +629,7 @@
                         } else {
                             // Add each byte of param to array
                             var rBuf = dataUtils.makeBuffer(2);
-                            rBuf.writeUInt16LE(param, 0);
+                            dataUtils.writeUInt16LE(rBuf, param, 0);
                             payloadBuffer = dataUtils.concatBuffers(payloadBuffer, rBuf);
                         }
 
