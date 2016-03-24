@@ -287,16 +287,16 @@
         gap_scan_policy_all : 0,
         gap_scan_policy_whitelist : 1
     }
-    
+
     function getByteArray(o) {
         if (typeof Buffer !== "undefined")
         {
             return new Uint8Array(o);
         } else {
-            return 0;
+            return o;
         }
     }
-    
+
     function makeBuffer(length) {
         if (typeof Buffer !== "undefined")
         {
@@ -305,7 +305,7 @@
             return new Uint8Array(length)
         }
     }
-    
+
     function concatBuffers(a, b, len) {
         if (typeof len === "undefined") len = a.byteLength + b.byteLength;
         if (typeof Buffer !== "undefined")
@@ -360,7 +360,7 @@
         packetHeader[i++] = this.cID;
 
         var packetBytes = concatBuffers(packetHeader, this.payload);
-        
+
         var byteArray = getByteArray(packetBytes);
 
         callback && callback(byteArray);
@@ -913,6 +913,6 @@
         dfuFlashUpload: {header : {tType: _bgtechnologyType.Bluetooth, mType: _bgmessageType.Command, lolen : 1, cls : _bgcommandClass.DFU, command : _bgcommandIDs.DFU_Flash_Upload}, paramCode: 0x08},
         dfuFlashUploadFinish: {header : {tType: _bgtechnologyType.Bluetooth, mType: _bgmessageType.Command, lolen : 0, cls : _bgcommandClass.DFU, command : _bgcommandIDs.DFU_Flash_Upload_Finish}, paramCode: 0x00},
     }
-    
+
     return bglib;
 }));
