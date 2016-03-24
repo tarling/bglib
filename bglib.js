@@ -287,6 +287,27 @@
         gap_scan_policy_all : 0,
         gap_scan_policy_whitelist : 1
     }
+    
+    function makeBuffer(length) {
+        if (typeof Buffer !== "undefined")
+        {
+            return new Buffer(length);
+        } else {
+            return new Uint8Array(length)
+        }
+    }
+    
+    function concatBuffers(a, b) {
+        if (typeof Buffer !== "undefined")
+        {
+            return Buffer.concat(a,b);
+        } else {
+            var c = new Uint8Array(a.byteLength + b.byteLength);
+            c.set(new Uint8Array(a),0);
+            c.set(new Uint8Array(b), a.byteLength);
+            return c;
+        }
+    }
 
     function Packet(messageType, technologyType, commandClass, commandID, payload, packetMode) {
         this.mType = messageType;
@@ -311,13 +332,13 @@
         if (this.packetMode) {
             numHeaderBytes++;
             // Create the packet
-            packetHeader =  new Buffer(numHeaderBytes);
+            packetHeader =  makeBuffer(numHeaderBytes)
             // Add the length byte to the front
             packetHeader[i++] = this.payload.length + 4;
         }
         else {
             // Just make a normal header
-            packetHeader =  new Buffer(numHeaderBytes);
+            packetHeader =  makeBuffer(numHeaderBytes)
         }
 
         // Make the buffer
@@ -328,7 +349,7 @@
         packetHeader[i++] = this.cClass;
         packetHeader[i++] = this.cID;
 
-        var packetBytes = Buffer.concat([packetHeader, this.payload]);
+        var packetBytes = concatBuffers([packetHeader, this.payload]);
 
         callback && callback(packetBytes);
 
@@ -524,7 +545,7 @@
                     // need to make sure that we don't over index;
                     var payloadLen = (lolen > (this.bgapiRXBuffer.length - 4) ? (this.bgapiRXBuffer.length - 4) : lolen);
 
-                    var payload = new Buffer(payloadLen);
+                    var payload = makeBuffer(payloadLen);
 
                     for (var j = 0; j < payloadLen; j++) {
                         payload[j] = this.bgapiRXBuffer[4 + j];
@@ -578,7 +599,7 @@
         this.verifyParams(command.paramCode, params, function(err) {
 
             // Get command information
-            var payloadBuffer = new Buffer(0);
+            var payloadBuffer = makeBuffer(0);
 
             // There's a problem with the params passed in.
             if (err) {
@@ -604,14 +625,14 @@
                         // If it's already separated into an array for us
                         if (Array.isArray(param)) {
 
-                            payloadBuffer = Buffer.concat([payloadBuffer, new Buffer(param)]);
+                            payloadBuffer = concatBuffers([payloadBuffer, makeBuffer(param)]);
 
                         }
                         else {
                             // Add each byte of param to array
-                            var rBuf = new Buffer(4);
+                            var rBuf = makeBuffer(4);
                             rBuf.writeUInt32LE(param, 0);
-                            payloadBuffer = Buffer.concat([payloadBuffer, rBuf], payloadBuffer.length + rBuf.length);
+                            payloadBuffer = concatBuffers([payloadBuffer, rBuf], payloadBuffer.length + rBuf.length);
                         }
 
                         break;
@@ -622,13 +643,13 @@
                     // If it's already separated into an array for us
                         if (Array.isArray(param)) {
 
-                            payloadBuffer = Buffer.concat([payloadBuffer, new Buffer(param)]);
+                            payloadBuffer = concatBuffers([payloadBuffer, makeBuffer(param)]);
 
                         } else {
                             // Add each byte of param to array
-                            var rBuf = new Buffer(2);
+                            var rBuf = makeBuffer(2);
                             rBuf.writeUInt16LE(param, 0);
-                            payloadBuffer = Buffer.concat([payloadBuffer, rBuf], payloadBuffer.length + rBuf.length);
+                            payloadBuffer = concatBuffers([payloadBuffer, rBuf], payloadBuffer.length + rBuf.length);
                         }
 
                         break;
@@ -637,9 +658,9 @@
                     case 3:
                     case 2:
                         // Add each byte of param to array
-                        var rBuf = new Buffer(1);
+                        var rBuf = makeBuffer(1);
                         rBuf.writeUInt8(param, 0);
-                        payloadBuffer = Buffer.concat([payloadBuffer, rBuf], payloadBuffer.length + rBuf.length);
+                        payloadBuffer = concatBuffers([payloadBuffer, rBuf], payloadBuffer.length + rBuf.length);
 
                         break
                     // This parameter is a data length and uint8 array
@@ -652,7 +673,7 @@
                             dataBuf = param;
                         }
                         else if (Array.isArray(param) || typeof param == "string") {
-                            dataBuf = new Buffer(param);
+                            dataBuf = makeBuffer(param);
                         }
                         else {
                             return callback && callback(new Error("Invalid parameter type. Should be an Array or string"));
@@ -665,9 +686,9 @@
                         command.header.payloadLowBits = totalPacketSize & 0xFF;
                         command.header.payloadHighBits = totalPacketSize >> 8;
 
-                        dataBuf = Buffer.concat([new Buffer([dataLength]), dataBuf], dataLength + 1);
+                        dataBuf = concatBuffers([makeBuffer([dataLength]), dataBuf], dataLength + 1);
 
-                        payloadBuffer = Buffer.concat([payloadBuffer, dataBuf], payloadBuffer.length + dataBuf.length);
+                        payloadBuffer = concatBuffers([payloadBuffer, dataBuf], payloadBuffer.length + dataBuf.length);
 
                         break;
 
@@ -675,12 +696,12 @@
                     case 10:
                         var address;
                         if (Array.isArray(param)) {
-                            address = new Buffer(address);
+                            address = makeBuffer(address);
                         }
                         if (Buffer.isBuffer(param)) {
                             address = param;
                         }
-                        payloadBuffer = Buffer.concat([payloadBuffer, address]);
+                        payloadBuffer = concatBuffers([payloadBuffer, address]);
 
                         break;
 
@@ -693,7 +714,7 @@
                             dataBuf = param;
                         }
                         else if (Array.isArray(param) || typeof param == "string") {
-                            dataBuf = new Buffer(param);
+                            dataBuf = makeBuffer(param);
                         }
                         else {
                             return callback && callback(new Error("Invalid parameter type. Should be an Array or string"));
@@ -706,9 +727,9 @@
                         command.header.payloadLowBits = totalPacketSize & 0xFF;
                         command.header.payloadHighBits = totalPacketSize >> 8;
 
-                        dataBuf = Buffer.concat([new Buffer([dataLength]), new Buffer(dataBuf)], dataLength + 1);
+                        dataBuf = concatBuffers([makeBuffer([dataLength]), makeBuffer(dataBuf)], dataLength + 1);
 
-                        payloadBuffer = Buffer.concat([payloadBuffer, dataBuf], payloadBuffer.length + dataBuf.length);
+                        payloadBuffer = concatBuffers([payloadBuffer, dataBuf], payloadBuffer.length + dataBuf.length);
 
                         break;
                 }
