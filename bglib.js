@@ -650,7 +650,7 @@
 
                         var dataBuf;
 
-                        if (Buffer.isBuffer(param)) {
+                        if (dataUtils.isBuffer(param)) {
                             dataBuf = param;
                         }
                         else if (Array.isArray(param) || typeof param == "string") {
@@ -679,7 +679,7 @@
                         if (Array.isArray(param)) {
                             address = dataUtils.makeBuffer(address);
                         }
-                        if (Buffer.isBuffer(param)) {
+                        if (dataUtils.isBuffer(param)) {
                             address = param;
                         }
                         payloadBuffer = dataUtils.concatBuffers(payloadBuffer, address);
@@ -691,7 +691,7 @@
 
                         var dataBuf;
 
-                        if (Buffer.isBuffer(param)) {
+                        if (dataUtils.isBuffer(param)) {
                             dataBuf = param;
                         }
                         else if (Array.isArray(param) || typeof param == "string") {
