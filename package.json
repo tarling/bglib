@@ -29,6 +29,6 @@
     "energy"
   ],
   "dependencies": {
-    "bleadvertise": "https://github.com/tarling/bleadvertise.git#commonjs"
+    "bleadvertise": "https://github.com/tarling/bleadvertise.git"
   }
 }
