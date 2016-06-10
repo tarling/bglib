@@ -16,8 +16,8 @@
     "lib": "libraries",
     "test": "Test script"
   },
-  "hardware" : {
-    "./test" : false
+  "hardware": {
+    "./test": false
   },
   "keywords": [
     "bluetooth",
@@ -29,6 +29,7 @@
     "energy"
   ],
   "dependencies": {
-    "bleadvertise": "https://github.com/tarling/bleadvertise.git#amd"
+    "bleadvertise": "https://github.com/tarling/bleadvertise.git#amd",
+    "buffer-data-utils": "git+https://github.com/tarling/buffer-data-utils.git"
   }
 }
