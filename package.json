@@ -29,7 +29,7 @@
     "energy"
   ],
   "dependencies": {
-    "bleadvertise": "https://github.com/tarling/bleadvertise.git#amd",
+    "bleadvertise": "https://github.com/tarling/bleadvertise.git#extract-utils",
     "buffer-data-utils": "git+https://github.com/tarling/buffer-data-utils.git"
   }
 }
