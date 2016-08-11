@@ -502,7 +502,7 @@ define(["./lib/bglib-responses", "./lib/bglib-events", "buffer-data-utils"], fun
                 if (this.bgapiRXBufferPos == 2) {
 
                     // store expected packet length so we know when this packet is complete
-                    this.bgapiRXDataLen = ch + ((this.bgapiRXBuffer[0] & 0x03) << 8);
+                    this.bgapiRXDataLen = ch + ((this.bgapiRXBuffer[0] & 0x07) << 8);
                 }
                 else if (this.bgapiRXBufferPos == this.bgapiRXDataLen + 4) {
                     // just received last expected bytes
